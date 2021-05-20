@@ -10,3 +10,6 @@ This app is developed for learning purposes only.
 - OkHttp
 
 > The app also demonstrate expand/collapse animation and some states handling using compose.
+
+
+![](https://i.imgur.com/3GpdSZ7.jpg)
