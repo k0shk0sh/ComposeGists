@@ -18,6 +18,7 @@ class GistRepositoryProvider @Inject constructor(
         try {
             val response = service.getGists()
             if (!response.isNullOrEmpty()) {
+                Log.e("Response", "${response.map { it.files }}")
                 return@withContext Response.Success(response)
             }
             return@withContext Response.Empty

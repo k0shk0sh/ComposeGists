@@ -1,4 +1,4 @@
-package com.fastaccess.gists
+package com.fastaccess.gists.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,10 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -38,4 +35,7 @@ class MainViewModel @Inject constructor(
             _loadingState.value = false
         }
     }
+
+    fun getGist(id: String) = (_responseState.value as? Response.Success<List<Gist>>)
+        ?.response?.firstOrNull { it.id == id }
 }

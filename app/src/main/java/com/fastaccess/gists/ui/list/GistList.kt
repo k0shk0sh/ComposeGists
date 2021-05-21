@@ -1,8 +1,5 @@
-package com.fastaccess.gists
+package com.fastaccess.gists.ui.list
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
@@ -11,60 +8,31 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.fastaccess.gists.R
 import com.fastaccess.gists.model.Gist
 import com.fastaccess.gists.model.Response
-import com.fastaccess.gists.ui.theme.ComposeTestTheme
+import com.fastaccess.gists.ui.main.MainViewModel
+import com.fastaccess.gists.ui.main.TopBar
+import com.fastaccess.gists.ui.views.CenteredBox
+import com.fastaccess.gists.ui.views.TextView
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import dagger.hilt.android.AndroidEntryPoint
-
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            ComposeTestTheme {
-                GistApp()
-            }
-        }
-    }
-}
-
-@Composable
-fun TopBar() {
-    TopAppBar(
-        title = { Text(text = "Gists Compose") },
-        backgroundColor = MaterialTheme.colors.primaryVariant,
-        contentColor = Color.White
-    )
-}
-
-@Composable
-fun GistApp(viewModel: MainViewModel = viewModel()) {
-    Scaffold(
-        topBar = { TopBar() },
-        content = { Body(viewModel) },
-    )
-}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Body(viewModel: MainViewModel) {
+fun GistList(viewModel: MainViewModel, navController: NavHostController) {
     val isLoading by viewModel.loadingState.collectAsState()
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = isLoading),
@@ -92,7 +60,16 @@ fun Body(viewModel: MainViewModel) {
                     ) {
                         GistRow(gist, hasDescription, rotationState)
                         AnimatedVisibility(visible = expanded) {
-                            Text(text = gist.description ?: "", modifier = Modifier.padding(4.dp))
+                            Column {
+                                Text(text = gist.description ?: "",
+                                    modifier = Modifier.padding(4.dp))
+                                TextButton(onClick = { navController.navigate("details/${gist.id}") },
+                                    modifier = Modifier.align(
+                                        Alignment.End,
+                                    )) {
+                                    TextView(text = "Read more")
+                                }
+                            }
                         }
                     }
                 }
@@ -127,27 +104,5 @@ fun GistRow(
                 modifier = Modifier.rotate(rotationState)
             )
         }
-    }
-}
-
-@Composable
-fun TextView(
-    text: String,
-) = Text(
-    text = text,
-    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-)
-
-@Composable
-fun CenteredBox(content: @Composable() () -> Unit) =
-    Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
-        content.invoke()
-    }
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ComposeTestTheme {
-        GistApp()
     }
 }

@@ -4,6 +4,7 @@ This app is developed for learning purposes only.
 
 #### Used libraries:
 - Compose
+- Navigation
 - Hilt 
 - ViewModel
 - Retrofit

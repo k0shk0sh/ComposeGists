@@ -30,6 +30,8 @@ data class Gist(
     var url: String? = null,
     @SerializedName("user")
     var user: Owner? = null,
+    @SerializedName("files")
+    var files: HashMap<String, File>? = null,
 )
 
 data class Owner(
@@ -39,4 +41,18 @@ data class Owner(
     var htmlUrl: String? = null,
     @SerializedName("login")
     var login: String? = null,
+)
+
+
+data class File(
+    @SerializedName("filename")
+    var filename: String? = null,
+    @SerializedName("language")
+    var language: String? = null,
+    @SerializedName("raw_url")
+    var rawUrl: String? = null,
+    @SerializedName("size")
+    var size: Int? = null,
+    @SerializedName("type")
+    var type: String? = null,
 )
