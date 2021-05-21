@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
@@ -41,9 +46,9 @@ fun TopBar(navController: NavController) {
     val isDetailsRoute = navState is NavBackStackEntry && (navState as NavBackStackEntry)
         .destination.route?.contains("details") == true
     val title = if (isDetailsRoute) {
-        "Details"
+        stringResource(R.string.details_label)
     } else {
-        "Gists Compose"
+        stringResource(R.string.app_name)
     }
     TopAppBar(
         title = { Text(text = title) },
@@ -53,11 +58,12 @@ fun TopBar(navController: NavController) {
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun navIcon(navController: NavController): @Composable () -> Unit = {
     IconButton(onClick = { navController.popBackStack() }) {
         Icon(painter = painterResource(id = R.drawable.ic_back),
-            contentDescription = "Back")
+            contentDescription = stringResource(R.string.back_label))
     }
 }
 

@@ -7,17 +7,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.fastaccess.gists.R
@@ -39,14 +42,14 @@ fun GistList(viewModel: MainViewModel, navController: NavHostController) {
         state = rememberSwipeRefreshState(isRefreshing = isLoading),
         modifier = Modifier.padding(vertical = 16.dp),
         onRefresh = { viewModel.loadGists() }) {
-        when (val state = viewModel.responseState.collectAsState().value) {
-            Response.Empty -> CenteredBox { TextView("No gists") }
+        val responseState by viewModel.responseState.observeAsState()
+        when (@Suppress("UnnecessaryVariable") val state = responseState) {
+            Response.Empty -> CenteredBox { TextView(stringResource(R.string.no_gists_label)) }
             is Response.Error -> CenteredBox {
-                TextView(state.throwable?.localizedMessage ?: "N/A")
+                TextView(state.throwable?.localizedMessage ?: stringResource(R.string.n_a))
             }
             is Response.Success -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(state.response.size) { index ->
-                    val gist = state.response[index]
+                items(state.response) { gist ->
                     var expanded by remember { mutableStateOf(false) }
                     val hasDescription = !gist.description.isNullOrEmpty()
                     val rotationState by animateFloatAsState(
@@ -68,7 +71,7 @@ fun GistList(viewModel: MainViewModel, navController: NavHostController) {
                                     modifier = Modifier.align(
                                         Alignment.End,
                                     )) {
-                                    TextView(text = "Read more")
+                                    TextView(text = stringResource(R.string.read_more_label))
                                 }
                             }
                         }

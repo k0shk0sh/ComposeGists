@@ -1,6 +1,8 @@
 package com.fastaccess.gists.model
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
+import kotlin.collections.HashMap
 
 sealed class Response<out T> {
     object Empty : Response<Nothing>()
@@ -12,7 +14,7 @@ data class Gist(
     @SerializedName("comments")
     var comments: Int? = null,
     @SerializedName("created_at")
-    var createdAt: String? = null,
+    var createdAt: Date? = null,
     @SerializedName("description")
     var description: String? = null,
     @SerializedName("html_url")
@@ -25,7 +27,7 @@ data class Gist(
     @SerializedName("truncated")
     var truncated: Boolean? = null,
     @SerializedName("updated_at")
-    var updatedAt: String? = null,
+    var updatedAt: Date? = null,
     @SerializedName("url")
     var url: String? = null,
     @SerializedName("user")
@@ -43,7 +45,6 @@ data class Owner(
     var login: String? = null,
 )
 
-
 data class File(
     @SerializedName("filename")
     var filename: String? = null,
@@ -52,7 +53,7 @@ data class File(
     @SerializedName("raw_url")
     var rawUrl: String? = null,
     @SerializedName("size")
-    var size: Int? = null,
+    var size: Long? = null,
     @SerializedName("type")
     var type: String? = null,
 )

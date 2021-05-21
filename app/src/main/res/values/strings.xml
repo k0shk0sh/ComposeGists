@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">ComposeTest</string>
+    <string name="app_name">Gists Compose</string>
+    <string name="details_label">Details</string>
+    <string name="back_label">Back</string>
+    <string name="no_gist_label">Gist is null</string>
+    <string name="no_gists_label">No gists</string>
+    <string name="n_a">N/A</string>
+    <string name="read_more_label">Read more</string>
+    <string name="comments_label">Comments: %d</string>
+    <string name="files_label">Files: %d</string>
 </resources>
