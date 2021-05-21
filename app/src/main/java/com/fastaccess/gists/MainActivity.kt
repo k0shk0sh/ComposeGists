@@ -60,20 +60,19 @@ fun GistApp(viewModel: MainViewModel = viewModel()) {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Body(viewModel: MainViewModel) {
-    val state = viewModel.responseState.collectAsState()
     val isLoading by viewModel.loadingState.collectAsState()
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = isLoading),
         modifier = Modifier.padding(vertical = 16.dp),
         onRefresh = { viewModel.loadGists() }) {
-        when (val response = state.value) {
+        when (val state = viewModel.responseState.collectAsState().value) {
             Response.Empty -> CenteredBox { TextView("No gists") }
             is Response.Error -> CenteredBox {
-                TextView(response.throwable?.localizedMessage ?: "N/A")
+                TextView(state.throwable?.localizedMessage ?: "N/A")
             }
             is Response.Success -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(response.response.size) { index ->
-                    val gist = response.response[index]
+                items(state.response.size) { index ->
+                    val gist = state.response[index]
                     var expanded by remember { mutableStateOf(false) }
                     val hasDescription = !gist.description.isNullOrEmpty()
                     Column(

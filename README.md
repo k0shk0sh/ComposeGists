@@ -12,4 +12,4 @@ This app is developed for learning purposes only.
 > The app also demonstrate expand/collapse animation and some states handling using compose.
 
 
-![](https://i.imgur.com/3GpdSZ7.jpg)
+![](https://i.imgur.com/pDxgEf3.jpg)
