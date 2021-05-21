@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fastaccess.gists.model.Gist
 import com.fastaccess.gists.model.Response
 import com.fastaccess.gists.ui.theme.ComposeTestTheme
 import com.google.accompanist.coil.rememberCoilPainter
@@ -89,33 +90,42 @@ fun Body(viewModel: MainViewModel) {
                                 expanded = !expanded && hasDescription
                             },
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = rememberCoilPainter(
-                                    request = gist.owner?.avatarUrl ?: "",
-                                ),
-                                contentDescription = gist.owner?.login ?: "",
-                                modifier = Modifier
-                                    .size(45.dp)
-                                    .clip(CircleShape)
-                            )
-                            Spacer(modifier = Modifier.size(24.dp))
-                            Text(text = gist.owner?.login ?: "", maxLines = 1)
-                            Spacer(modifier = Modifier.weight(1f))
-                            if (hasDescription) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_down),
-                                    contentDescription = "",
-                                    modifier = Modifier.rotate(rotationState)
-                                )
-                            }
-                        }
+                        GistRow(gist, hasDescription, rotationState)
                         AnimatedVisibility(visible = expanded) {
                             Text(text = gist.description ?: "", modifier = Modifier.padding(4.dp))
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun GistRow(
+    gist: Gist,
+    hasDescription: Boolean,
+    rotationState: Float,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Image(
+            painter = rememberCoilPainter(
+                request = gist.owner?.avatarUrl ?: "",
+            ),
+            contentDescription = gist.owner?.login ?: "",
+            modifier = Modifier
+                .size(45.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+        Text(text = gist.owner?.login ?: "", maxLines = 1)
+        Spacer(modifier = Modifier.weight(1f))
+        if (hasDescription) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_down),
+                contentDescription = "",
+                modifier = Modifier.rotate(rotationState)
+            )
         }
     }
 }
