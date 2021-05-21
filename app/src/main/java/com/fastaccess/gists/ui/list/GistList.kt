@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -60,7 +61,7 @@ fun GistList(viewModel: MainViewModel, navController: NavHostController) {
                     ) {
                         GistRow(gist, hasDescription, rotationState)
                         AnimatedVisibility(visible = expanded) {
-                            Column {
+                            Column(modifier = Modifier.fillMaxWidth()) {
                                 Text(text = gist.description ?: "",
                                     modifier = Modifier.padding(4.dp))
                                 TextButton(onClick = { navController.navigate("details/${gist.id}") },
