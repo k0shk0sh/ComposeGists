@@ -5,12 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,10 +79,15 @@ fun Body(viewModel: MainViewModel) {
                     val gist = state.response[index]
                     var expanded by remember { mutableStateOf(false) }
                     val hasDescription = !gist.description.isNullOrEmpty()
+                    val rotationState by animateFloatAsState(
+                        if (expanded) 180F else 0F,
+                    )
                     Column(
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 8.dp)
-                            .clickable { expanded = !expanded && hasDescription },
+                            .clickable {
+                                expanded = !expanded && hasDescription
+                            },
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(
@@ -97,7 +106,7 @@ fun Body(viewModel: MainViewModel) {
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_down),
                                     contentDescription = "",
-                                    modifier = Modifier.rotate(if (expanded) 180F else 0F)
+                                    modifier = Modifier.rotate(rotationState)
                                 )
                             }
                         }
