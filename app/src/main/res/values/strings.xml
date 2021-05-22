@@ -8,4 +8,6 @@
     <string name="read_more_label">Read more</string>
     <string name="comments_label">Comments: %d</string>
     <string name="files_label">Files: %d</string>
+    <string name="files">Files</string>
+    <string name="description_label">Description</string>
 </resources>

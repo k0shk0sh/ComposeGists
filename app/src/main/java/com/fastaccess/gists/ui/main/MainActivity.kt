@@ -5,23 +5,27 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
 import com.fastaccess.gists.R
 import com.fastaccess.gists.ui.details.GistDetails
 import com.fastaccess.gists.ui.list.GistList
@@ -40,11 +44,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TopBar(navController: NavController) {
-    val navState by navController.currentBackStackEntryFlow.collectAsState(initial = "gists")
-    val isDetailsRoute = navState is NavBackStackEntry && (navState as NavBackStackEntry)
-        .destination.route?.contains("details") == true
+    val state by navController.currentBackStackEntryAsState()
+    val isDetailsRoute = state?.destination?.route?.contains("details") == true
     val title = if (isDetailsRoute) {
         stringResource(R.string.details_label)
     } else {
